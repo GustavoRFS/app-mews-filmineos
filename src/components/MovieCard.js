@@ -1,14 +1,13 @@
-import React, {useState} from 'react';
+import React, { useState } from "react";
 import {
   Text,
   StyleSheet,
   View,
   ImageBackground,
-  TouchableHighlight,
-  TouchableWithoutFeedback,
   Pressable,
-} from 'react-native';
-import InvisibleButton from './InvisibleButton';
+} from "react-native";
+import InvisibleButton from "./InvisibleButton";
+import RatingStars from "./RatingStars";
 
 export default (props) => {
   const [infoIsShown, setInfoIsShown] = useState(false);
@@ -17,7 +16,7 @@ export default (props) => {
     card: {
       width: 174,
       height: 261,
-      shadowColor: '#4f4f4f',
+      shadowColor: "#4f4f4f",
       shadowOffset: {
         width: 0,
         height: 4,
@@ -25,7 +24,7 @@ export default (props) => {
       shadowOpacity: 0.32,
       shadowRadius: 5.46,
       elevation: 9,
-      backgroundColor: '#1a1a1a',
+      backgroundColor: "#1a1a1a",
 
       marginLeft: 8,
       marginRight: 8,
@@ -34,28 +33,45 @@ export default (props) => {
       width: 174,
       height: 261,
     },
-    info: {
+    infoView: {
       flexGrow: 1,
-      display: infoIsShown ? 'flex' : 'none',
-      backgroundColor: '#000',
+      display: infoIsShown ? "flex" : "none",
+      backgroundColor: "#000",
       opacity: infoIsShown ? 0.8 : 0,
-      alignItems: 'center',
+      alignItems: "center",
+      paddingHorizontal: 8,
+      paddingVertical: 20,
+      width: "100%",
+    },
+    textView: {
+      flexGrow: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      width: "100%",
     },
     text: {
-      margin: 10,
-      color: '#fff',
-      flexGrow: 0.7,
-      textAlign: 'center',
-      textAlignVertical: 'center',
+      color: "#fff",
+      textAlign: "center",
+    },
+    button: {
+      flexGrow: 1,
+      width: "100%",
+      alignItems: "center",
+      justifyContent: "flex-end",
+    },
+    titleView: {
+      flexGrow: 1,
+      height: "20%",
+      width: "100%",
+      justifyContent: "flex-start",
+      alignItems: "center",
     },
     title: {
-      margin: 10,
-      flexGrow: 0.1,
-      color: '#fff',
-      textAlign: 'center',
-      textAlignVertical: 'center',
+      color: "#fff",
+      textAlign: "center",
+      textAlignVertical: "center",
       fontSize: 18,
-      fontWeight: 'bold',
+      fontWeight: "bold",
     },
   });
 
@@ -64,19 +80,45 @@ export default (props) => {
       <Pressable
         onPress={() => {
           setInfoIsShown(!infoIsShown);
-        }}>
-        <ImageBackground style={styles.image} source={{uri: props.movie.cover}}>
-          <View style={styles.info}>
-            <Text style={styles.title}>{props.movie.movieName}</Text>
-            <Text style={styles.text}>
-              Avaliação média: 10{'\n'}ESTRELINHAS
-            </Text>
-            <InvisibleButton
-              onPress={() => {
-                console.warn('kk');
-              }}
-              style={styles.button}
-              text="Ver mais"></InvisibleButton>
+        }}
+      >
+        <ImageBackground
+          style={styles.image}
+          source={
+            props.movie.poster_path
+              ? {
+                  uri: `https://image.tmdb.org/t/p/w200${props.movie.poster_path}`,
+                }
+              : require("../assets/noposter.png")
+          }
+        >
+          <View style={styles.infoView}>
+            <View style={styles.titleView}>
+              <Text style={styles.title}>{props.movie.title}</Text>
+            </View>
+            <View style={styles.textView}>
+              <Text style={styles.text}>
+                Avaliação média: {props.movie.average_rating}
+              </Text>
+              <RatingStars
+                fullWidth={110}
+                ratingValue={props.movie.average_rating}
+                width={18}
+              />
+            </View>
+            <View style={styles.button}>
+              <InvisibleButton
+                onPress={() => {
+                  console.log(props.movie);
+                  props.navigation.navigate("MovieInfo", {
+                    movie: props.movie,
+                    isAddingMovie: false,
+                  });
+                }}
+                style={styles.button}
+                text="Ver mais"
+              />
+            </View>
           </View>
         </ImageBackground>
       </Pressable>

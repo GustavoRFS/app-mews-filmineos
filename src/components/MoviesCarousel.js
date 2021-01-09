@@ -18,7 +18,7 @@ export default (props) => {
     },
     title: {
       fontSize: 20,
-      fontWeight: "600",
+      fontWeight: "bold",
       color: "#f1f1f1",
       marginTop: 10,
       marginLeft: 12,
@@ -30,6 +30,11 @@ export default (props) => {
       flexDirection: "row",
       justifyContent: "space-evenly",
     },
+    noMovie: {
+      color: "#f1f1f1",
+      fontSize: 24,
+      textAlign: "center",
+    },
   });
 
   function renderCarousel(array) {
@@ -38,9 +43,15 @@ export default (props) => {
       if (i % 2 == 0) {
         pages.push(
           <View style={styles.page} key={i}>
-            <MovieCard movie={array[i]}></MovieCard>
+            <MovieCard
+              navigation={props.navigation}
+              movie={array[i]}
+            ></MovieCard>
             {array[i + 1] ? (
-              <MovieCard movie={array[i + 1]}></MovieCard>
+              <MovieCard
+                navigation={props.navigation}
+                movie={array[i + 1]}
+              ></MovieCard>
             ) : undefined}
           </View>
         );
@@ -52,13 +63,22 @@ export default (props) => {
   return (
     <View style={{ display: "flex" }}>
       <Text style={styles.title}>{props.title}</Text>
-      <ScrollView
-        horizontal={true}
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-      >
-        {renderCarousel(props.movieList)}
-      </ScrollView>
+      {props.movieList.length > 0 ? (
+        <ScrollView
+          horizontal={true}
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+        >
+          {renderCarousel(props.movieList)}
+        </ScrollView>
+      ) : (
+        <View style={{ marginVertical: 30 }}>
+          <Text style={styles.noMovie}>Nenhum filme</Text>
+          <Text style={{ ...styles.noMovie, transform: [{ rotate: "90deg" }] }}>
+            :c
+          </Text>
+        </View>
+      )}
     </View>
   );
 };
