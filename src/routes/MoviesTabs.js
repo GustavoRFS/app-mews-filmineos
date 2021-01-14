@@ -1,8 +1,9 @@
-import React from "react";
-import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
-import MoviesList from "../views/MoviesList";
-import Icon from "react-native-vector-icons/FontAwesome";
-import AllMovies from "../views/AllMovies";
+import React from 'react';
+import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import MoviesList from '../views/MoviesList';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import AllMovies from '../views/AllMovies';
+import Login from '../views/Login';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -12,22 +13,21 @@ export default () => {
       initialRouteName="MoviesSections"
       activeColor="#bf2f2f"
       inactiveColor="#afafaf"
-      barStyle={{ backgroundColor: "#0b0b0b" }}
-      shifting={true}
-    >
+      barStyle={{backgroundColor: '#0b0b0b'}}
+      shifting={true}>
       <Tab.Screen
         name="MoviesSections"
         component={MoviesList}
         options={{
-          tabBarLabel: "Início",
-          tabBarIcon: "home",
+          tabBarLabel: 'Início',
+          tabBarIcon: 'home',
         }}
       />
       <Tab.Screen
         name="AllMovies"
         options={{
-          tabBarLabel: "Todos os filmes",
-          tabBarIcon: ({ color }) => (
+          tabBarLabel: 'Todos os filmes',
+          tabBarIcon: ({color}) => (
             <Icon name="list" color={color} size={20}></Icon>
           ),
         }}

@@ -1,13 +1,7 @@
-import React, { useState } from "react";
-import {
-  Text,
-  StyleSheet,
-  View,
-  ImageBackground,
-  Pressable,
-} from "react-native";
-import InvisibleButton from "./InvisibleButton";
-import RatingStars from "./RatingStars";
+import React, {useState} from 'react';
+import {Text, StyleSheet, View, ImageBackground, Pressable} from 'react-native';
+import InvisibleButton from './InvisibleButton';
+import RatingStars from './RatingStars';
 
 export default (props) => {
   const [infoIsShown, setInfoIsShown] = useState(false);
@@ -16,7 +10,7 @@ export default (props) => {
     card: {
       width: 174,
       height: 261,
-      shadowColor: "#4f4f4f",
+      shadowColor: '#4f4f4f',
       shadowOffset: {
         width: 0,
         height: 4,
@@ -24,7 +18,7 @@ export default (props) => {
       shadowOpacity: 0.32,
       shadowRadius: 5.46,
       elevation: 9,
-      backgroundColor: "#1a1a1a",
+      backgroundColor: '#1a1a1a',
 
       marginLeft: 8,
       marginRight: 8,
@@ -35,43 +29,43 @@ export default (props) => {
     },
     infoView: {
       flexGrow: 1,
-      display: infoIsShown ? "flex" : "none",
-      backgroundColor: "#000",
-      opacity: infoIsShown ? 0.8 : 0,
-      alignItems: "center",
+      display: infoIsShown ? 'flex' : 'none',
+      backgroundColor: infoIsShown ? 'rgba(0,0,0,0.7)' : 'rgba(0,0,0,0)',
+      opacity: infoIsShown ? 1 : 0,
+      alignItems: 'center',
       paddingHorizontal: 8,
       paddingVertical: 20,
-      width: "100%",
+      width: '100%',
     },
     textView: {
       flexGrow: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      width: "100%",
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '100%',
     },
     text: {
-      color: "#fff",
-      textAlign: "center",
+      color: '#fff',
+      textAlign: 'center',
     },
     button: {
       flexGrow: 1,
-      width: "100%",
-      alignItems: "center",
-      justifyContent: "flex-end",
+      width: '100%',
+      alignItems: 'center',
+      justifyContent: 'flex-end',
     },
     titleView: {
       flexGrow: 1,
-      height: "20%",
-      width: "100%",
-      justifyContent: "flex-start",
-      alignItems: "center",
+      height: '20%',
+      width: '100%',
+      justifyContent: 'flex-start',
+      alignItems: 'center',
     },
     title: {
-      color: "#fff",
-      textAlign: "center",
-      textAlignVertical: "center",
+      color: '#fff',
+      textAlign: 'center',
+      textAlignVertical: 'center',
       fontSize: 18,
-      fontWeight: "bold",
+      fontWeight: 'bold',
     },
   });
 
@@ -80,8 +74,7 @@ export default (props) => {
       <Pressable
         onPress={() => {
           setInfoIsShown(!infoIsShown);
-        }}
-      >
+        }}>
         <ImageBackground
           style={styles.image}
           source={
@@ -89,9 +82,8 @@ export default (props) => {
               ? {
                   uri: `https://image.tmdb.org/t/p/w200${props.movie.poster_path}`,
                 }
-              : require("../assets/noposter.png")
-          }
-        >
+              : require('../assets/noposter.png')
+          }>
           <View style={styles.infoView}>
             <View style={styles.titleView}>
               <Text style={styles.title}>{props.movie.title}</Text>
@@ -110,7 +102,7 @@ export default (props) => {
               <InvisibleButton
                 onPress={() => {
                   console.log(props.movie);
-                  props.navigation.navigate("MovieInfo", {
+                  props.navigation.navigate('MovieInfo', {
                     movie: props.movie,
                     isAddingMovie: false,
                   });

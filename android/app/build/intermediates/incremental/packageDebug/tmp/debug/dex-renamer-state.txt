@@ -1,4 +1,4 @@
-#Fri Jan 08 05:13:17 BRT 2021
+#Sat Jan 09 10:59:46 BRT 2021
 base.0=/media/gustavo/HDD/GIT/GitHub/my-movies/android/app/build/intermediates/dex/debug/mergeDexDebug/out/classes.dex
 renamed.0=classes.dex
 path.0=classes.dex
