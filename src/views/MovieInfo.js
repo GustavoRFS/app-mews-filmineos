@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, { useState, useContext } from "react";
 import {
   StyleSheet,
   Image,
@@ -7,26 +7,26 @@ import {
   View,
   Dimensions,
   Button,
-} from 'react-native';
-import RatingModal from '../components/RatingModal';
-import RatingStars from '../components/RatingStars';
-import AppDataContext from '../contexts/AppData';
-import Toast from 'react-native-simple-toast';
-import api from '../api/api';
-import LoadingModal from '../components/LoadingModal';
-import toLocaleString from '../utils/toLocaleString';
+} from "react-native";
+import RatingModal from "../components/RatingModal";
+import RatingStars from "../components/RatingStars";
+import AppDataContext from "../contexts/AppData";
+//import Toast from "react-native-smart-toast";
+import api from "../api/api";
+import LoadingModal from "../components/LoadingModal";
+import toLocaleString from "../utils/toLocaleString";
 
-export default ({route, navigation}) => {
-  const {refreshData, userData} = useContext(AppDataContext);
+export default ({ route, navigation }) => {
+  const { refreshData, userData } = useContext(AppDataContext);
   const [modalIsVisible, setModalVisibility] = useState(false);
   const [imageHeight, setImageHeight] = useState(
-    (Dimensions.get('window').width * 9) / 16,
+    (Dimensions.get("window").width * 9) / 16
   );
   const [buttonEnabled, setButtonState] = useState(true);
   const [isLoading, setLoadingState] = useState(false);
 
-  Dimensions.addEventListener('change', () => {
-    setImageHeight((Dimensions.get('window').width * 9) / 16);
+  Dimensions.addEventListener("change", () => {
+    setImageHeight((Dimensions.get("window").width * 9) / 16);
   });
 
   const movie = route.params.movie;
@@ -37,44 +37,44 @@ export default ({route, navigation}) => {
       padding: 16,
     },
     title: {
-      color: '#fff',
-      fontWeight: 'bold',
+      color: "#fff",
+      fontWeight: "bold",
       fontSize: 22,
     },
     subtitles: {
-      color: '#fff',
-      fontWeight: 'bold',
+      color: "#fff",
+      fontWeight: "bold",
       fontSize: 18,
     },
     normalText: {
-      color: '#fff',
+      color: "#fff",
     },
     image: {
-      width: '100%',
+      width: "100%",
       height: imageHeight,
-      resizeMode: 'cover',
+      resizeMode: "cover",
     },
     noImage: {
-      width: '100%',
+      width: "100%",
       height: 240,
     },
     button: {
       marginTop: 20,
       width: 200,
-      alignSelf: 'center',
+      alignSelf: "center",
     },
     ratingTexts: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'center',
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
     },
   });
 
   const releaseDate = toLocaleString(movie.release_date);
 
   return (
-    <ScrollView style={{flex: 1, backgroundColor: '#1a1a1a'}}>
+    <ScrollView style={{ flex: 1, backgroundColor: "#1a1a1a" }}>
       {movie.backdrop_path ? (
         <Image
           style={styles.image}
@@ -86,12 +86,13 @@ export default ({route, navigation}) => {
         <View style={styles.noImage}>
           <Text
             style={{
-              color: '#afafaf',
+              color: "#afafaf",
               fontSize: 30,
-              height: '100%',
-              textAlign: 'center',
-              textAlignVertical: 'center',
-            }}>
+              height: "100%",
+              textAlign: "center",
+              textAlignVertical: "center",
+            }}
+          >
             Sem Imagem
           </Text>
         </View>
@@ -99,23 +100,23 @@ export default ({route, navigation}) => {
 
       <View style={styles.textSection}>
         <Text style={styles.title}>{movie.title}</Text>
-        {movie.overview.trim() !== '' ? (
-          <Text style={{marginTop: 10}}>
+        {movie.overview.trim() !== "" ? (
+          <Text style={{ marginTop: 10 }}>
             <Text style={styles.subtitles}>Descrição:</Text>
             <Text style={styles.normalText}>{` ${movie.overview}`}</Text>
           </Text>
         ) : (
-          <View style={{marginTop: 10}}></View>
+          <View style={{ marginTop: 10 }}></View>
         )}
-        {releaseDate !== 'Invalid Date' ? (
-          <Text style={{marginTop: 10}}>
+        {releaseDate !== "Invalid Date" ? (
+          <Text style={{ marginTop: 10 }}>
             <Text style={styles.subtitles}>Data de lançamento: </Text>
             <Text style={styles.normalText}>{releaseDate}</Text>
           </Text>
         ) : null}
 
         {!isAddingMovie ? (
-          <View style={{marginTop: 10}}>
+          <View style={{ marginTop: 10 }}>
             <View style={styles.ratingTexts}>
               <Text style={styles.subtitles}>Avaliação média: </Text>
               {movie.average_rating ? (
@@ -125,7 +126,7 @@ export default ({route, navigation}) => {
                   ratingValue={movie.average_rating}
                 />
               ) : (
-                <Text style={{marginTop: 2, ...styles.normalText}}>
+                <Text style={{ marginTop: 2, ...styles.normalText }}>
                   Ainda não avaliado
                 </Text>
               )}
@@ -139,7 +140,7 @@ export default ({route, navigation}) => {
                   ratingValue={movie.bururu_rating}
                 />
               ) : (
-                <Text style={{marginTop: 2, ...styles.normalText}}>
+                <Text style={{ marginTop: 2, ...styles.normalText }}>
                   Ainda não avaliado
                 </Text>
               )}
@@ -153,7 +154,7 @@ export default ({route, navigation}) => {
                   ratingValue={movie.gururu_rating}
                 />
               ) : (
-                <Text style={{marginTop: 2, ...styles.normalText}}>
+                <Text style={{ marginTop: 2, ...styles.normalText }}>
                   Ainda não avaliado
                 </Text>
               )}
@@ -165,24 +166,24 @@ export default ({route, navigation}) => {
           <Button
             disabled={!buttonEnabled}
             color="#bf2f2f"
-            title={isAddingMovie ? 'Adicionar' : 'Avaliar'}
+            title={isAddingMovie ? "Adicionar" : "Avaliar"}
             onPress={() => {
               if (isAddingMovie) {
                 setButtonState(false);
                 api
-                  .post('/movies', movie)
+                  .post("/movies", movie)
                   .then(async () => {
                     setLoadingState(true);
                     await refreshData();
                     setLoadingState(false);
-                    Toast.show('Filme adicionado!');
+                    //Toast.show("Filme adicionado!");
                     navigation.pop();
                   })
                   .catch((err) => {
                     if (err.response.data) {
-                      Toast.show(err.response.data.error);
+                      //Toast.show(err.response.data.error);
                     } else {
-                      Toast.show('Grrr algo deu errado :c');
+                      //Toast.show("Grrr algo deu errado :c");
                     }
                     setButtonState(true);
                     setLoadingState(false);
@@ -190,13 +191,14 @@ export default ({route, navigation}) => {
               } else {
                 setModalVisibility(true);
               }
-            }}></Button>
+            }}
+          ></Button>
         </View>
       </View>
       {!isAddingMovie ? (
         <RatingModal
           initialValue={
-            userData.name === 'Bururu'
+            userData.name === "Bururu"
               ? movie.bururu_rating || 0
               : movie.gururu_rating || 0
           }

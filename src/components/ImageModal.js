@@ -1,33 +1,34 @@
-import React, {useState, useContext} from 'react';
-import {StyleSheet, Modal, View, Text, Button} from 'react-native';
-import LoadingModal from './LoadingModal';
-import TextInput from './TextInput';
-import AppDataContext from '../contexts/AppData';
-import api from '../api/api';
-import SimpleToast from 'react-native-simple-toast';
+import React, { useState, useContext } from "react";
+import { StyleSheet, Modal, View, Text, Button } from "react-native";
+import LoadingModal from "./LoadingModal";
+import TextInput from "./TextInput";
+import AppDataContext from "../contexts/AppData";
+import api from "../api/api";
+import {} from "expo";
+////import Toast from "react-native-smart-toast";
 
 const styles = StyleSheet.create({
   text: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
-    textAlign: 'center',
+    textAlign: "center",
   },
   centeredView: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.4)",
   },
   modalView: {
     margin: 20,
-    backgroundColor: '#1a1a1a',
+    backgroundColor: "#1a1a1a",
     borderRadius: 10,
     paddingVertical: 30,
     paddingHorizontal: 60,
-    alignItems: 'center',
-    shadowColor: '#000',
+    alignItems: "center",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -43,19 +44,21 @@ const styles = StyleSheet.create({
 });
 
 export default (props) => {
-  const {refreshData} = useContext(AppDataContext);
-  const [url, setUrl] = useState('');
+  const { refreshData } = useContext(AppDataContext);
+  const [url, setUrl] = useState("");
   const [isLoading, setLoading] = useState(false);
+
   return (
     <Modal
       animationType="slide"
       visible={props.visible}
       onRequestClose={props.onRequestClose}
-      transparent={true}>
+      transparent={true}
+    >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
           <Text style={styles.text}>Insira a url da nova imagem</Text>
-          <View style={{width: 228, marginBottom: 20}}>
+          <View style={{ width: 228, marginBottom: 20 }}>
             <TextInput
               onChangeText={(text) => {
                 setUrl(text);
@@ -64,14 +67,14 @@ export default (props) => {
               returnKeyType="done"
             />
           </View>
-          <View style={{width: 100}}>
+          <View style={{ width: 100 }}>
             <Button
               title="Alterar"
               color="#bf2f2f"
               onPress={() => {
                 setLoading(true);
                 api
-                  .put('/auth/image', {profilePic: url})
+                  .put("/auth/image", { profilePic: url })
                   .then(async () => {
                     refreshData();
                     setLoading(false);
@@ -79,13 +82,14 @@ export default (props) => {
                   })
                   .catch((err) => {
                     if (err.response.data) {
-                      SimpleToast.show(err.response.data.error);
+                      //                    setToastText(err.response.data.error);
                     } else {
-                      SimpleToast.show('Grrr algo deu errado :c');
+                      //                      setToastText(err.response.data.error);
                     }
                     setLoading(false);
                   });
-              }}></Button>
+              }}
+            ></Button>
           </View>
         </View>
       </View>

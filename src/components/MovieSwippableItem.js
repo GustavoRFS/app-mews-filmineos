@@ -1,41 +1,41 @@
-import React from 'react';
-import {View, Image, Text, StyleSheet, Pressable} from 'react-native';
-import Swipeout from 'react-native-swipeout';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import RatingStars from './RatingStars';
-import {useNavigation} from '@react-navigation/native';
-import toLocaleString from '../utils/toLocaleString';
+import React from "react";
+import { View, Image, Text, StyleSheet, Pressable } from "react-native";
+import Swipeout from "react-native-swipeout";
+import Icon from "react-native-vector-icons/FontAwesome";
+import RatingStars from "./RatingStars";
+import { useNavigation } from "@react-navigation/native";
+import toLocaleString from "../utils/toLocaleString";
 
 const styles = StyleSheet.create({
   itemSwipeout: {
-    backgroundColor: '#1e1e1e',
+    backgroundColor: "#1e1e1e",
     borderBottomWidth: 1,
-    borderBottomColor: '#afafaf',
+    borderBottomColor: "#afafaf",
   },
   itemView: {
-    flexDirection: 'row',
+    flexDirection: "row",
     paddingLeft: 10,
     paddingVertical: 10,
   },
   info: {
-    display: 'flex',
+    display: "flex",
     marginLeft: 10,
   },
   title: {
-    color: '#fafafa',
-    fontWeight: 'bold',
+    color: "#fafafa",
+    fontWeight: "bold",
     fontSize: 16,
   },
   sections: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginTop: 4,
-    alignItems: 'center',
+    alignItems: "center",
   },
   subtitle: {
-    color: '#fafafa',
-    fontWeight: '600',
+    color: "#fafafa",
+    fontWeight: "600",
   },
-  normalText: {color: '#fafafa'},
+  normalText: { color: "#fafafa" },
   image: {
     marginLeft: 6,
     width: 80,
@@ -44,16 +44,18 @@ const styles = StyleSheet.create({
 });
 
 export default (props) => {
-  const {movie} = props;
+  const { movie } = props;
   const navigation = useNavigation();
   const swipeoutBtns = [
     {
       component: (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
           <Icon color="#fff" name="trash" size={40} />
         </View>
       ),
-      backgroundColor: '#c00',
+      backgroundColor: "#c00",
       onPress: props.onPress,
     },
   ];
@@ -63,9 +65,10 @@ export default (props) => {
     <Swipeout style={styles.itemSwipeout} right={swipeoutBtns}>
       <Pressable
         onPress={() =>
-          navigation.navigate('MovieInfo', {movie, isAddingMovie: false})
+          navigation.navigate("MovieInfo", { movie, isAddingMovie: false })
         }
-        style={styles.itemView}>
+        style={styles.itemView}
+      >
         {movie.poster_path ? (
           <Image
             source={{
@@ -77,19 +80,20 @@ export default (props) => {
           <View style={styles.image}>
             <Text
               style={{
-                color: '#a1a1a1',
+                color: "#a1a1a1",
                 fontSize: 16,
-                textAlign: 'center',
-                height: '100%',
-                textAlignVertical: 'center',
-              }}>
+                textAlign: "center",
+                height: "100%",
+                textAlignVertical: "center",
+              }}
+            >
               Sem capa
             </Text>
           </View>
         )}
         <View style={styles.info}>
           <Text style={styles.title}>{movie.title}</Text>
-          {releaseDate !== 'Invalid Date' ? (
+          {releaseDate !== "Invalid Date" ? (
             <View style={styles.sections}>
               <Text style={styles.subtitle}>Data de lançamento: </Text>
               <Text style={styles.normalText}>{releaseDate}</Text>

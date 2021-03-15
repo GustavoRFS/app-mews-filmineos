@@ -1,26 +1,26 @@
-import React, {useState} from 'react';
-import {View, StyleSheet, Button, ActivityIndicator} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
-import TextInput from '../components/TextInput';
-import searchMovies from '../api/TMDB/searchMovies';
-import Toast from 'react-native-simple-toast';
-import MovieSearchList from '../components/MovieSearchList';
+import React, { useState } from "react";
+import { View, StyleSheet, Button, ActivityIndicator } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
+import TextInput from "../components/TextInput";
+import searchMovies from "../api/TMDB/searchMovies";
+//import Toast from "react-native-smart-toast";
+import MovieSearchList from "../components/MovieSearchList";
 
 export default (props) => {
-  const [movieSearch, setMovieSearch] = useState('');
+  const [movieSearch, setMovieSearch] = useState("");
   const [movies, setMovies] = useState([]);
   const [isLoading, setLoadingState] = useState(false);
   const styles = StyleSheet.create({
     searchMovieView: {
       flex: 1,
-      backgroundColor: '#1a1a1a',
+      backgroundColor: "#1a1a1a",
     },
     textInput: {
-      width: '80%',
-      alignSelf: 'center',
+      width: "80%",
+      alignSelf: "center",
       marginTop: 30,
     },
-    buttonView: {width: '30%', alignSelf: 'center'},
+    buttonView: { width: "30%", alignSelf: "center" },
   });
 
   const handleMovieSearch = () => {
@@ -41,22 +41,22 @@ export default (props) => {
           });
           setMovies(moviesArray);
         } else {
-          Toast.show('Nada encontrado :c');
+          //Toast.show("Nada encontrado :c");
         }
       })
       .catch((err) => {
         setLoadingState(false);
         if (movieSearch.trim().length === 0) {
-          Toast.show('Escreve antes né ô');
+          //Toast.show("Escreve antes né ô");
         } else {
-          Toast.show('Nada encontrado :c');
+          //Toast.show("Nada encontrado :c");
         }
       });
   };
 
   return (
     <View style={styles.searchMovieView}>
-      <ScrollView contentContainerStyle={{flexGrow: 1}}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.textInput}>
           <TextInput
             onChangeText={(text) => setMovieSearch(text)}
@@ -65,19 +65,21 @@ export default (props) => {
             onSubmitEditing={handleMovieSearch}
           />
         </View>
-        <View style={{marginTop: 20, ...styles.buttonView}}>
+        <View style={{ marginTop: 20, ...styles.buttonView }}>
           <Button
             color="#bf2f2f"
             title="Procurar"
-            onPress={handleMovieSearch}></Button>
+            onPress={handleMovieSearch}
+          ></Button>
         </View>
         {isLoading ? (
           <View
             style={{
               flexGrow: 1,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <ActivityIndicator animating={true} color="#bf2f2f" size="large" />
           </View>
         ) : (

@@ -1,5 +1,5 @@
-import React, {useContext} from 'react';
-import AuthContext from '../contexts/Auth';
+import React, { useContext } from "react";
+import AuthContext from "../contexts/Auth";
 import {
   View,
   Text,
@@ -8,15 +8,15 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-} from 'react-native';
-import TextInput from '../components/TextInput';
-import Toast from 'react-native-simple-toast';
+} from "react-native";
+import TextInput from "../components/TextInput";
+//import Toast from "react-native-smart-toast";
 
 const styles = StyleSheet.create({
   image: {
     width: 120,
     height: 120,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   form: {
     marginTop: 40,
@@ -24,13 +24,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     width: 360,
     height: 260,
-    alignSelf: 'center',
-    justifyContent: 'space-between',
+    alignSelf: "center",
+    justifyContent: "space-between",
   },
   register: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
   },
 });
 
@@ -38,19 +38,20 @@ export default (props) => {
   const context = useContext(AuthContext);
   var email, password;
   return (
-    <View style={{flex: 1, backgroundColor: '#1e1e1e'}}>
-      <ScrollView contentContainerStyle={{flex: 1, justifyContent: 'center'}}>
-        <View style={{alignItems: 'center'}}>
+    <View style={{ flex: 1, backgroundColor: "#1e1e1e" }}>
+      <ScrollView contentContainerStyle={{ flex: 1, justifyContent: "center" }}>
+        <View style={{ alignItems: "center" }}>
           <View
             style={{
               borderRadius: 20,
               width: 180,
               height: 180,
-              backgroundColor: '#0b0b0b',
-              justifyContent: 'center',
-            }}>
+              backgroundColor: "#0b0b0b",
+              justifyContent: "center",
+            }}
+          >
             <Image
-              source={require('../assets/icon.png')}
+              source={require("../assets/icon.png")}
               style={styles.image}
             />
           </View>
@@ -69,15 +70,15 @@ export default (props) => {
               }}
               secureTextEntry={true}
             />
-            <View style={{alignSelf: 'center', width: 100}}>
+            <View style={{ alignSelf: "center", width: 100 }}>
               <Button
                 title="Entrar"
                 color="#bf2f2f"
                 onPress={() => {
                   if (!email || !email.trim()) {
-                    Toast.show('Insira seu email');
+                    //Toast.show('Insira seu email');
                   } else if (!password) {
-                    Toast.show('Insira sua senha');
+                    //Toast.show('Insira sua senha');
                   } else {
                     context.signIn(email, password);
                   }
@@ -86,13 +87,15 @@ export default (props) => {
             </View>
             <View style={styles.register}>
               <TouchableOpacity
-                onPress={() => props.navigation.navigate('Register')}>
+                onPress={() => props.navigation.navigate("Register")}
+              >
                 <Text
                   style={{
-                    textDecorationStyle: 'solid',
-                    textDecorationLine: 'underline',
-                    color: '#fafafa',
-                  }}>
+                    textDecorationStyle: "solid",
+                    textDecorationLine: "underline",
+                    color: "#fafafa",
+                  }}
+                >
                   Cadastre-se
                 </Text>
               </TouchableOpacity>
