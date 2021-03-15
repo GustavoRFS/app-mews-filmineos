@@ -1,5 +1,12 @@
-import React, {useState} from 'react';
-import {Text, StyleSheet, View, ImageBackground, Pressable} from 'react-native';
+import React, {useRef, useState} from 'react';
+import {
+  Text,
+  StyleSheet,
+  View,
+  ImageBackground,
+  Pressable,
+  Animated,
+} from 'react-native';
 import InvisibleButton from './InvisibleButton';
 import RatingStars from './RatingStars';
 
@@ -31,7 +38,6 @@ export default (props) => {
       flexGrow: 1,
       display: infoIsShown ? 'flex' : 'none',
       backgroundColor: infoIsShown ? 'rgba(0,0,0,0.7)' : 'rgba(0,0,0,0)',
-      opacity: infoIsShown ? 1 : 0,
       alignItems: 'center',
       paddingHorizontal: 8,
       paddingVertical: 20,
@@ -69,11 +75,38 @@ export default (props) => {
     },
   });
 
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  const switchOpacity = () => {
+    infoIsShown ? fadeOut() : fadeIn();
+  };
+
+  const fadeIn = () => {
+    setInfoIsShown(!infoIsShown);
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 200,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const fadeOut = () => {
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 200,
+      useNativeDriver: true,
+    }).start(({finished}) => {
+      if (finished) {
+        setInfoIsShown(!infoIsShown);
+      }
+    });
+  };
+
   return (
     <View style={styles.card}>
       <Pressable
         onPress={() => {
-          setInfoIsShown(!infoIsShown);
+          switchOpacity();
         }}>
         <ImageBackground
           style={styles.image}
@@ -84,7 +117,7 @@ export default (props) => {
                 }
               : require('../assets/noposter.png')
           }>
-          <View style={styles.infoView}>
+          <Animated.View style={{opacity: fadeAnim, ...styles.infoView}}>
             <View style={styles.titleView}>
               <Text style={styles.title}>{props.movie.title}</Text>
             </View>
@@ -92,16 +125,19 @@ export default (props) => {
               <Text style={styles.text}>
                 Avaliação média: {props.movie.average_rating}
               </Text>
-              <RatingStars
-                fullWidth={110}
-                ratingValue={props.movie.average_rating}
-                width={18}
-              />
+              {props.movie.average_rating === undefined ? (
+                <Text style={styles.text}>Ainda não avaliado</Text>
+              ) : (
+                <RatingStars
+                  fullWidth={110}
+                  ratingValue={props.movie.average_rating}
+                  width={18}
+                />
+              )}
             </View>
             <View style={styles.button}>
               <InvisibleButton
                 onPress={() => {
-                  console.log(props.movie);
                   props.navigation.navigate('MovieInfo', {
                     movie: props.movie,
                     isAddingMovie: false,
@@ -111,7 +147,7 @@ export default (props) => {
                 text="Ver mais"
               />
             </View>
-          </View>
+          </Animated.View>
         </ImageBackground>
       </Pressable>
     </View>

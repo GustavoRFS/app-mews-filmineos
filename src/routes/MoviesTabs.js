@@ -3,7 +3,6 @@ import {createMaterialBottomTabNavigator} from '@react-navigation/material-botto
 import MoviesList from '../views/MoviesList';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AllMovies from '../views/AllMovies';
-import Login from '../views/Login';
 
 const Tab = createMaterialBottomTabNavigator();
 

@@ -1,4 +1,30 @@
 {
-  "name": "teste",
-  "displayName": "teste"
+  "expo": {
+    "name": "mews-filmineos",
+    "slug": "mews-filmineos",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./src/assets/icon05x.png",
+    "splash": {
+      "image": "./src/assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1e1e1e"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./src/assets/adaptive-icon.png",
+        "backgroundColor": "#0b0b0b"
+      }
+    },
+    "web": {
+      "favicon": "./src/assets/favicon.png"
+    }
+  }
 }

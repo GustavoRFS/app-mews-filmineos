@@ -4,6 +4,7 @@ import Swipeout from 'react-native-swipeout';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import RatingStars from './RatingStars';
 import {useNavigation} from '@react-navigation/native';
+import toLocaleString from '../utils/toLocaleString';
 
 const styles = StyleSheet.create({
   itemSwipeout: {
@@ -45,7 +46,6 @@ const styles = StyleSheet.create({
 export default (props) => {
   const {movie} = props;
   const navigation = useNavigation();
-
   const swipeoutBtns = [
     {
       component: (
@@ -54,13 +54,11 @@ export default (props) => {
         </View>
       ),
       backgroundColor: '#c00',
-      onPress: () => {
-        console.warn(movie.title);
-      },
+      onPress: props.onPress,
     },
   ];
 
-  const releaseDate = new Date(movie.release_date).toLocaleDateString();
+  const releaseDate = toLocaleString(movie.release_date);
   return (
     <Swipeout style={styles.itemSwipeout} right={swipeoutBtns}>
       <Pressable
@@ -99,7 +97,7 @@ export default (props) => {
           ) : null}
           <View style={styles.sections}>
             <Text style={styles.subtitle}>Avaliação Média: </Text>
-            {movie.average_rating ? (
+            {movie.average_rating !== undefined ? (
               <RatingStars
                 width={14}
                 fullWidth={80}
@@ -111,11 +109,11 @@ export default (props) => {
           </View>
           <View style={styles.sections}>
             <Text style={styles.subtitle}>Avaliação da Bururu: </Text>
-            {movie.average_rating ? (
+            {movie.bururu_rating !== undefined ? (
               <RatingStars
                 width={14}
                 fullWidth={80}
-                ratingValue={movie.average_rating}
+                ratingValue={movie.bururu_rating}
               />
             ) : (
               <Text style={styles.normalText}>Ainda não avaliado</Text>
@@ -123,11 +121,11 @@ export default (props) => {
           </View>
           <View style={styles.sections}>
             <Text style={styles.subtitle}>Avaliação do Gururu: </Text>
-            {movie.average_rating ? (
+            {movie.gururu_rating !== undefined ? (
               <RatingStars
                 width={14}
                 fullWidth={80}
-                ratingValue={movie.average_rating}
+                ratingValue={movie.gururu_rating}
               />
             ) : (
               <Text style={styles.normalText}>Ainda não avaliado</Text>

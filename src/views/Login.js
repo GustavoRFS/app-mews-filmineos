@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useContext} from 'react';
+import AuthContext from '../contexts/Auth';
 import {
   View,
   Text,
@@ -9,6 +10,7 @@ import {
   ScrollView,
 } from 'react-native';
 import TextInput from '../components/TextInput';
+import Toast from 'react-native-simple-toast';
 
 const styles = StyleSheet.create({
   image: {
@@ -21,7 +23,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 20,
     width: 360,
-    height: 300,
+    height: 260,
     alignSelf: 'center',
     justifyContent: 'space-between',
   },
@@ -33,26 +35,56 @@ const styles = StyleSheet.create({
 });
 
 export default (props) => {
+  const context = useContext(AuthContext);
+  var email, password;
   return (
     <View style={{flex: 1, backgroundColor: '#1e1e1e'}}>
       <ScrollView contentContainerStyle={{flex: 1, justifyContent: 'center'}}>
-        <View>
-          <Image
-            style={styles.image}
-            source={require('../assets/Netflix_icon.png')}
-          />
+        <View style={{alignItems: 'center'}}>
+          <View
+            style={{
+              borderRadius: 20,
+              width: 180,
+              height: 180,
+              backgroundColor: '#0b0b0b',
+              justifyContent: 'center',
+            }}>
+            <Image
+              source={require('../assets/icon.png')}
+              style={styles.image}
+            />
+          </View>
           <View style={styles.form}>
-            <TextInput placeholder="Email" />
-            <TextInput placeholder="Senha" />
+            <TextInput
+              placeholder="Email"
+              onChangeText={(text) => {
+                email = text;
+              }}
+              returnKeyType="next"
+            />
+            <TextInput
+              placeholder="Senha"
+              onChangeText={(text) => {
+                password = text;
+              }}
+              secureTextEntry={true}
+            />
             <View style={{alignSelf: 'center', width: 100}}>
               <Button
                 title="Entrar"
                 color="#bf2f2f"
-                onPress={() => props.navigation.navigate('MoviesTabs')}
+                onPress={() => {
+                  if (!email || !email.trim()) {
+                    Toast.show('Insira seu email');
+                  } else if (!password) {
+                    Toast.show('Insira sua senha');
+                  } else {
+                    context.signIn(email, password);
+                  }
+                }}
               />
             </View>
             <View style={styles.register}>
-              <Text style={{color: '#fafafa'}}>Ainda não é cadastradx? </Text>
               <TouchableOpacity
                 onPress={() => props.navigation.navigate('Register')}>
                 <Text
@@ -62,19 +94,6 @@ export default (props) => {
                     color: '#fafafa',
                   }}>
                   Cadastre-se
-                </Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.register}>
-              <TouchableOpacity
-                onPress={() => props.navigation.navigate('ForgotPassword')}>
-                <Text
-                  style={{
-                    textDecorationStyle: 'solid',
-                    textDecorationLine: 'underline',
-                    color: '#fafafa',
-                  }}>
-                  Esqueceu sua senha?
                 </Text>
               </TouchableOpacity>
             </View>

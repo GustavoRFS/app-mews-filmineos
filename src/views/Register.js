@@ -2,6 +2,8 @@ import React from 'react';
 import {View, ScrollView, StyleSheet, Image, Text, Button} from 'react-native';
 import TextInput from '../components/TextInput';
 import Picker from 'react-native-dropdown-picker';
+import api from '../api/api';
+import Toast from 'react-native-simple-toast';
 
 const styles = StyleSheet.create({
   image: {
@@ -22,6 +24,7 @@ const styles = StyleSheet.create({
 });
 
 export default (props) => {
+  var email, password, passwordConfirmation;
   var name = null;
   return (
     <View style={{flex: 1, backgroundColor: '#1e1e1e'}}>
@@ -30,14 +33,38 @@ export default (props) => {
           flex: 1,
           justifyContent: 'center',
         }}>
-        <Image
-          style={styles.image}
-          source={require('../assets/Netflix_icon.png')}
-        />
+        <View
+          style={{
+            borderRadius: 20,
+            alignSelf: 'center',
+            backgroundColor: '#0b0b0b',
+            justifyContent: 'center',
+            width: 180,
+            height: 180,
+          }}>
+          <Image style={styles.image} source={require('../assets/icon.png')} />
+        </View>
         <View style={styles.form}>
-          <TextInput placeholder="Email" />
-          <TextInput placeholder="Senha" />
-          <TextInput placeholder="Confirmação da Senha" />
+          <TextInput
+            placeholder="Email"
+            onChangeText={(text) => {
+              email = text;
+            }}
+          />
+          <TextInput
+            placeholder="Senha"
+            onChangeText={(text) => {
+              password = text;
+            }}
+            secureTextEntry={true}
+          />
+          <TextInput
+            secureTextEntry={true}
+            placeholder="Confirmação da Senha"
+            onChangeText={(text) => {
+              passwordConfirmation = text;
+            }}
+          />
           <View
             style={{
               flexDirection: 'row',
@@ -58,11 +85,10 @@ export default (props) => {
               placeholder="Selecione"
               onChangeItem={(item) => {
                 name = item.value;
-                console.warn(name);
               }}
               items={[
-                {label: 'a Bururu', value: 'bururu'},
-                {label: 'o Gururu', value: 'gururu'},
+                {label: 'a Bururu', value: 'Bururu'},
+                {label: 'o Gururu', value: 'Gururu'},
               ]}
             />
           </View>
@@ -70,7 +96,34 @@ export default (props) => {
             <Button
               title="Cadastrar"
               color="#bf2f2f"
-              onPress={() => props.navigation.pop()}
+              onPress={() => {
+                if (!name) {
+                  Toast.show('Selecione quem é você');
+                } else if (!email || !email.trim()) {
+                  Toast.show('Insira seu email');
+                } else if (!password) {
+                  Toast.show('Insira sua senha');
+                } else if (!passwordConfirmation) {
+                  Toast.show('Confirme sua senha');
+                } else {
+                  if (password === passwordConfirmation) {
+                    api
+                      .post('/auth/register', {name, email, password})
+                      .then(() => {
+                        props.navigation.pop();
+                      })
+                      .catch((err) => {
+                        if (err.response.data) {
+                          Toast.show(err.response.data.error);
+                        } else {
+                          Toast.show('Grrr algo deu errado ô :c');
+                        }
+                      });
+                  } else {
+                    Toast.show('As senhas não são identicas');
+                  }
+                }
+              }}
             />
           </View>
         </View>

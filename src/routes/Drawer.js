@@ -1,8 +1,11 @@
-import React from 'react';
+import React, {useState, useContext} from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import MoviesTabs from './MoviesTabs';
 import {TouchableOpacity, Image, View, StyleSheet, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import ImageModal from '../components/ImageModal';
+import AuthContext from '../contexts/Auth';
+import AppDataContext from '../contexts/AppData';
 
 const Drawer = createDrawerNavigator();
 
@@ -26,13 +29,19 @@ const styles = StyleSheet.create({
 });
 
 export default (props) => {
+  const [modalVisible, setModalVisibility] = useState(false);
+  const {signOut} = useContext(AuthContext);
+  const {refreshData, userData} = useContext(AppDataContext);
+
   const drawerContent = (
     <View style={styles.drawerView}>
       <View style={styles.userView}>
-        <Image
-          style={styles.image}
-          source={require('../assets/Netflix_icon.png')}
-        />
+        <TouchableOpacity
+          onPress={() => {
+            setModalVisibility(true);
+          }}>
+          <Image style={styles.image} source={{uri: userData.profilePic}} />
+        </TouchableOpacity>
         <View
           style={{
             marginLeft: 14,
@@ -49,7 +58,10 @@ export default (props) => {
           </Text>
           <View style={{flexDirection: 'row'}}>
             <Text style={{color: '#fafafa'}}>Não é você? </Text>
-            <TouchableOpacity onPress={() => props.navigation.pop()}>
+            <TouchableOpacity
+              onPress={() => {
+                signOut();
+              }}>
               <Text style={{color: '#fafafa', textDecorationLine: 'underline'}}>
                 Sair
               </Text>
@@ -57,6 +69,12 @@ export default (props) => {
           </View>
         </View>
       </View>
+      <ImageModal
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisibility(false);
+        }}
+        transparent={true}></ImageModal>
     </View>
   );
 
@@ -68,8 +86,8 @@ export default (props) => {
     headerTitle: () => {
       return (
         <Image
-          source={require('../assets/Netflix_icon.png')}
-          style={{width: 40, height: 40}}></Image>
+          source={require('../assets/icon05x.png')}
+          style={{width: 35, height: 35}}></Image>
       );
     },
     headerTintColor: '#fff',
@@ -84,7 +102,7 @@ export default (props) => {
             paddingHorizontal: 14,
             paddingVertical: 12,
           }}
-          onPress={() => stackNavigation.navigate('AddMovie')}>
+          onPress={() => stackNavigation.navigate('SearchMovie')}>
           <Icon name="plus" color={props.tintColor} size={20} />
         </TouchableOpacity>
       ),
@@ -99,7 +117,7 @@ export default (props) => {
           onPress={() => navigation.openDrawer()}>
           <Image
             style={{width: 34, height: 34, borderRadius: 50}}
-            source={require('../assets/Netflix_icon.png')}
+            source={{uri: userData.profilePic}}
           />
         </TouchableOpacity>
       ),

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   StyleSheet,
   Image,
@@ -10,15 +10,20 @@ import {
 } from 'react-native';
 import RatingModal from '../components/RatingModal';
 import RatingStars from '../components/RatingStars';
-
+import AppDataContext from '../contexts/AppData';
 import Toast from 'react-native-simple-toast';
+import api from '../api/api';
+import LoadingModal from '../components/LoadingModal';
+import toLocaleString from '../utils/toLocaleString';
 
 export default ({route, navigation}) => {
+  const {refreshData, userData} = useContext(AppDataContext);
   const [modalIsVisible, setModalVisibility] = useState(false);
   const [imageHeight, setImageHeight] = useState(
     (Dimensions.get('window').width * 9) / 16,
   );
   const [buttonEnabled, setButtonState] = useState(true);
+  const [isLoading, setLoadingState] = useState(false);
 
   Dimensions.addEventListener('change', () => {
     setImageHeight((Dimensions.get('window').width * 9) / 16);
@@ -66,7 +71,7 @@ export default ({route, navigation}) => {
     },
   });
 
-  const releaseDate = new Date(movie.release_date).toLocaleDateString();
+  const releaseDate = toLocaleString(movie.release_date);
 
   return (
     <ScrollView style={{flex: 1, backgroundColor: '#1a1a1a'}}>
@@ -164,8 +169,24 @@ export default ({route, navigation}) => {
             onPress={() => {
               if (isAddingMovie) {
                 setButtonState(false);
-                Toast.show('Filme adicionado!');
-                navigation.pop();
+                api
+                  .post('/movies', movie)
+                  .then(async () => {
+                    setLoadingState(true);
+                    await refreshData();
+                    setLoadingState(false);
+                    Toast.show('Filme adicionado!');
+                    navigation.pop();
+                  })
+                  .catch((err) => {
+                    if (err.response.data) {
+                      Toast.show(err.response.data.error);
+                    } else {
+                      Toast.show('Grrr algo deu errado :c');
+                    }
+                    setButtonState(true);
+                    setLoadingState(false);
+                  });
               } else {
                 setModalVisibility(true);
               }
@@ -174,15 +195,21 @@ export default ({route, navigation}) => {
       </View>
       {!isAddingMovie ? (
         <RatingModal
+          initialValue={
+            userData.name === 'Bururu'
+              ? movie.bururu_rating || 0
+              : movie.gururu_rating || 0
+          }
           visible={modalIsVisible}
           onRequestClose={() => {
             setModalVisibility(false);
+            navigation.pop();
           }}
-          onSubmit={() => {
-            setModalVisibility(false);
-          }}
+          movie={movie}
         />
-      ) : null}
+      ) : (
+        <LoadingModal visible={isLoading} />
+      )}
     </ScrollView>
   );
 };

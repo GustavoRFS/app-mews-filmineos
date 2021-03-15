@@ -1,17 +1,18 @@
 import React, {useState, useContext} from 'react';
 import {StyleSheet, Modal, View, Text, Button} from 'react-native';
-import RatingStars from './RatingStars';
-import Slider from '@react-native-community/slider';
-import api from '../api/api';
-import AppDataContext from '../contexts/AppData';
 import LoadingModal from './LoadingModal';
+import TextInput from './TextInput';
+import AppDataContext from '../contexts/AppData';
+import api from '../api/api';
+import SimpleToast from 'react-native-simple-toast';
 
 const styles = StyleSheet.create({
   text: {
     color: '#fff',
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 20,
+    textAlign: 'center',
   },
   centeredView: {
     flex: 1,
@@ -43,9 +44,8 @@ const styles = StyleSheet.create({
 
 export default (props) => {
   const {refreshData} = useContext(AppDataContext);
-  const [ratingValue, setRatingValue] = useState(props.initialValue);
-  const [isLoading, setLoadingState] = useState(false);
-
+  const [url, setUrl] = useState('');
+  const [isLoading, setLoading] = useState(false);
   return (
     <Modal
       animationType="slide"
@@ -54,33 +54,36 @@ export default (props) => {
       transparent={true}>
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <Text style={styles.text}> Deixe sua avaliação</Text>
-          <View style={{width: 200, transform: [{translateY: 25}]}}>
-            <Slider
-              style={{opacity: 0}}
-              minimumValue={0}
-              maximumValue={10}
-              value={props.initialValue}
-              onValueChange={(value) => setRatingValue(value.toFixed(1))}
+          <Text style={styles.text}>Insira a url da nova imagem</Text>
+          <View style={{width: 228, marginBottom: 20}}>
+            <TextInput
+              onChangeText={(text) => {
+                setUrl(text);
+              }}
+              placeholder="Url da Imagem"
+              returnKeyType="done"
             />
           </View>
-
-          <RatingStars width={32} ratingValue={ratingValue} />
-          <Text style={{marginTop: 18, fontSize: 18, color: '#fff'}}>
-            {ratingValue}
-          </Text>
-          <View style={styles.button}>
+          <View style={{width: 100}}>
             <Button
-              title="Confirmar"
+              title="Alterar"
               color="#bf2f2f"
               onPress={() => {
+                setLoading(true);
                 api
-                  .put('/movies/rate', {_id: props.movie._id, ratingValue})
+                  .put('/auth/image', {profilePic: url})
                   .then(async () => {
-                    setLoadingState(true);
-                    await refreshData();
-                    setLoadingState(false);
+                    refreshData();
+                    setLoading(false);
                     props.onRequestClose();
+                  })
+                  .catch((err) => {
+                    if (err.response.data) {
+                      SimpleToast.show(err.response.data.error);
+                    } else {
+                      SimpleToast.show('Grrr algo deu errado :c');
+                    }
+                    setLoading(false);
                   });
               }}></Button>
           </View>
