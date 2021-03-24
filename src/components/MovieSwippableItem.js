@@ -1,6 +1,14 @@
 import React from "react";
-import { View, Image, Text, StyleSheet, Pressable } from "react-native";
-import Swipeout from "react-native-swipeout";
+import {
+  View,
+  Image,
+  Text,
+  StyleSheet,
+  Pressable,
+  Animated,
+  TouchableNativeFeedback,
+} from "react-native";
+import Swipeable from "react-native-gesture-handler/Swipeable";
 import Icon from "react-native-vector-icons/FontAwesome";
 import RatingStars from "./RatingStars";
 import { useNavigation } from "@react-navigation/native";
@@ -46,23 +54,47 @@ const styles = StyleSheet.create({
 export default (props) => {
   const { movie } = props;
   const navigation = useNavigation();
-  const swipeoutBtns = [
-    {
-      component: (
-        <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+
+  const swipeableRight = (progress) => {
+    return (
+      <TouchableNativeFeedback onPress={props.onPress}>
+        <Animated.View
+          style={[
+            {
+              justifyContent: "center",
+              width: 120,
+              backgroundColor: "#bf2f2f",
+            },
+            {
+              transform: [
+                {
+                  translateX: progress.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [120, 0],
+                  }),
+                },
+              ],
+            },
+          ]}
         >
-          <Icon color="#fff" name="trash" size={40} />
-        </View>
-      ),
-      backgroundColor: "#c00",
-      onPress: props.onPress,
-    },
-  ];
+          <View
+            style={[
+              {
+                justifyContent: "center",
+                alignItems: "center",
+              },
+            ]}
+          >
+            <Icon color="#fff" name="trash" size={40} />
+          </View>
+        </Animated.View>
+      </TouchableNativeFeedback>
+    );
+  };
 
   const releaseDate = toLocaleString(movie.release_date);
   return (
-    <Swipeout style={styles.itemSwipeout} right={swipeoutBtns}>
+    <Swipeable renderRightActions={swipeableRight} friction={2.3}>
       <Pressable
         onPress={() =>
           navigation.navigate("MovieInfo", { movie, isAddingMovie: false })
@@ -137,6 +169,6 @@ export default (props) => {
           </View>
         </View>
       </Pressable>
-    </Swipeout>
+    </Swipeable>
   );
 };

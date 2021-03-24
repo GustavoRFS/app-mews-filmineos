@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { View, StyleSheet, Button, ActivityIndicator } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import TextInput from "../components/TextInput";
 import searchMovies from "../api/TMDB/searchMovies";
-//import Toast from "react-native-smart-toast";
 import MovieSearchList from "../components/MovieSearchList";
+import AppDataContext from "../contexts/AppData";
 
 export default (props) => {
+  const { showMessage } = useContext(AppDataContext);
   const [movieSearch, setMovieSearch] = useState("");
   const [movies, setMovies] = useState([]);
   const [isLoading, setLoadingState] = useState(false);
@@ -41,15 +42,15 @@ export default (props) => {
           });
           setMovies(moviesArray);
         } else {
-          //Toast.show("Nada encontrado :c");
+          showMessage("Nada encontrado :c");
         }
       })
       .catch((err) => {
         setLoadingState(false);
         if (movieSearch.trim().length === 0) {
-          //Toast.show("Escreve antes né ô");
+          showMessage("Escreve antes né ô");
         } else {
-          //Toast.show("Nada encontrado :c");
+          showMessage("Nada encontrado :c");
         }
       });
   };

@@ -4,8 +4,6 @@ import LoadingModal from "./LoadingModal";
 import TextInput from "./TextInput";
 import AppDataContext from "../contexts/AppData";
 import api from "../api/api";
-import {} from "expo";
-////import Toast from "react-native-smart-toast";
 
 const styles = StyleSheet.create({
   text: {
@@ -44,7 +42,7 @@ const styles = StyleSheet.create({
 });
 
 export default (props) => {
-  const { refreshData } = useContext(AppDataContext);
+  const { refreshData, showMessage } = useContext(AppDataContext);
   const [url, setUrl] = useState("");
   const [isLoading, setLoading] = useState(false);
 
@@ -67,29 +65,42 @@ export default (props) => {
               returnKeyType="done"
             />
           </View>
-          <View style={{ width: 100 }}>
-            <Button
-              title="Alterar"
-              color="#bf2f2f"
-              onPress={() => {
-                setLoading(true);
-                api
-                  .put("/auth/image", { profilePic: url })
-                  .then(async () => {
-                    refreshData();
-                    setLoading(false);
-                    props.onRequestClose();
-                  })
-                  .catch((err) => {
-                    if (err.response.data) {
-                      //                    setToastText(err.response.data.error);
-                    } else {
-                      //                      setToastText(err.response.data.error);
-                    }
-                    setLoading(false);
-                  });
-              }}
-            ></Button>
+          <View
+            style={{
+              flexDirection: "row",
+            }}
+          >
+            <View style={{ marginRight: 40 }}>
+              <Button
+                title="Cancelar"
+                color="#bf2f2f"
+                onPress={props.onRequestClose}
+              />
+            </View>
+            <View>
+              <Button
+                title="Alterar"
+                color="#bf2f2f"
+                onPress={() => {
+                  setLoading(true);
+                  api
+                    .put("/auth/image", { profilePic: url })
+                    .then(async () => {
+                      await refreshData();
+                      setLoading(false);
+                      props.onRequestClose();
+                    })
+                    .catch((err) => {
+                      if (err.response.data) {
+                        showMessage(err.response.data.error);
+                      } else {
+                        showMessage(err.response.data.error);
+                      }
+                      setLoading(false);
+                    });
+                }}
+              />
+            </View>
           </View>
         </View>
       </View>

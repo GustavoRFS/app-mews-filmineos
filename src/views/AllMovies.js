@@ -1,31 +1,32 @@
-import React, {useContext, useState} from 'react';
-import {View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
-import MovieSwippableItem from '../components/MovieSwippableItem';
-import AppDataContext from '../contexts/AppData';
-import LoadingModal from '../components/LoadingModal';
-import api from '../api/api';
-import TextInput from '../components/TextInput';
+import React, { useContext, useState } from "react";
+import { View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
+import MovieSwippableItem from "../components/MovieSwippableItem";
+import AppDataContext from "../contexts/AppData";
+import LoadingModal from "../components/LoadingModal";
+import api from "../api/api";
+import TextInput from "../components/TextInput";
 
 export default () => {
   const [isLoading, setLoadingState] = useState(false);
-  const {allMovies, refreshData} = useContext(AppDataContext);
-  const [search, setSearchText] = useState('');
+  const { allMovies, refreshData } = useContext(AppDataContext);
+  const [search, setSearchText] = useState("");
 
   const submitSearch = (text) => {
     setSearchText(text);
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: '#1e1e1e'}}>
+    <View style={{ flex: 1, backgroundColor: "#1e1e1e" }}>
       <ScrollView>
         <View
           style={{
-            width: '80%',
-            alignSelf: 'center',
+            width: "80%",
+            alignSelf: "center",
             marginTop: 20,
             marginBottom: 20,
-          }}>
+          }}
+        >
           <TextInput
             placeholder="Pesquisa"
             returnKeyType="search"
@@ -41,6 +42,7 @@ export default () => {
           ) {
             return (
               <MovieSwippableItem
+                key={movie._id}
                 movie={movie}
                 onPress={() => {
                   api.delete(`/movies?_id=${movie._id}`).then(async () => {

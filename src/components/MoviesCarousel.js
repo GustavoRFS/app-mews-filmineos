@@ -1,56 +1,61 @@
-import React, {useState} from 'react';
-import {StyleSheet, Text, View, ScrollView, Dimensions} from 'react-native';
-import MovieCard from './MovieCard';
+import React, { useState } from "react";
+import { StyleSheet, Text, View, ScrollView, Dimensions } from "react-native";
+import MovieCard from "./MovieCard";
 
 export default (props) => {
-  const [pageWidth, setPageWidth] = useState(Dimensions.get('window').width);
+  const [pageWidth, setPageWidth] = useState(Dimensions.get("window").width);
 
-  Dimensions.addEventListener('change', () => {
-    setPageWidth(Dimensions.get('window').width);
+  Dimensions.addEventListener("change", () => {
+    setPageWidth(Dimensions.get("window").width);
   });
 
   const styles = StyleSheet.create({
     item: {
-      width: '90%',
-      alignSelf: 'center',
+      width: "90%",
+      alignSelf: "center",
       height: 10,
     },
     title: {
       fontSize: 20,
-      fontWeight: 'bold',
-      color: '#f1f1f1',
+      fontWeight: "bold",
+      color: "#f1f1f1",
       marginTop: 10,
       marginLeft: 12,
       marginBottom: 10,
     },
     page: {
       width: pageWidth,
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-evenly',
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-evenly",
     },
     noMovie: {
-      color: '#f1f1f1',
+      color: "#f1f1f1",
       fontSize: 24,
-      textAlign: 'center',
+      textAlign: "center",
     },
   });
 
   function renderCarousel(array) {
     var pages = [];
+
     for (var i = 0; i < array.length; i++) {
       if (i % 2 == 0) {
         pages.push(
           <View style={styles.page} key={i}>
             <MovieCard
+              type={props.type}
               navigation={props.navigation}
-              movie={array[i]}></MovieCard>
+              movie={array[i]}
+            ></MovieCard>
             {array[i + 1] ? (
               <MovieCard
+                type={props.type}
                 navigation={props.navigation}
-                movie={array[i + 1]}></MovieCard>
+                movie={array[i + 1]}
+              ></MovieCard>
             ) : undefined}
-          </View>,
+          </View>
         );
       }
     }
@@ -58,19 +63,20 @@ export default (props) => {
   }
 
   return (
-    <View style={{display: 'flex'}}>
+    <View style={{ display: "flex" }}>
       <Text style={styles.title}>{props.title}</Text>
       {props.movieList.length > 0 ? (
         <ScrollView
           horizontal={true}
           pagingEnabled
-          showsHorizontalScrollIndicator={false}>
+          showsHorizontalScrollIndicator={false}
+        >
           {renderCarousel(props.movieList)}
         </ScrollView>
       ) : (
-        <View style={{marginVertical: 30}}>
+        <View style={{ marginVertical: 30 }}>
           <Text style={styles.noMovie}>Nenhum filme</Text>
-          <Text style={{...styles.noMovie, transform: [{rotate: '90deg'}]}}>
+          <Text style={{ ...styles.noMovie, transform: [{ rotate: "90deg" }] }}>
             :c
           </Text>
         </View>

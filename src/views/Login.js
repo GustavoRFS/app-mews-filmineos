@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import AuthContext from "../contexts/Auth";
 import {
   View,
@@ -10,7 +10,7 @@ import {
   ScrollView,
 } from "react-native";
 import TextInput from "../components/TextInput";
-//import Toast from "react-native-smart-toast";
+import LoadingModal from "../components/LoadingModal";
 
 const styles = StyleSheet.create({
   image: {
@@ -36,9 +36,14 @@ const styles = StyleSheet.create({
 
 export default (props) => {
   const context = useContext(AuthContext);
-  var email, password;
+  const [isLoading, setLoading] = useState(false);
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   return (
     <View style={{ flex: 1, backgroundColor: "#1e1e1e" }}>
+      <LoadingModal visible={isLoading} />
       <ScrollView contentContainerStyle={{ flex: 1, justifyContent: "center" }}>
         <View style={{ alignItems: "center" }}>
           <View
@@ -59,14 +64,14 @@ export default (props) => {
             <TextInput
               placeholder="Email"
               onChangeText={(text) => {
-                email = text;
+                setEmail(text);
               }}
               returnKeyType="next"
             />
             <TextInput
               placeholder="Senha"
               onChangeText={(text) => {
-                password = text;
+                setPassword(text);
               }}
               secureTextEntry={true}
             />
@@ -74,13 +79,15 @@ export default (props) => {
               <Button
                 title="Entrar"
                 color="#bf2f2f"
-                onPress={() => {
+                onPress={async () => {
                   if (!email || !email.trim()) {
-                    //Toast.show('Insira seu email');
+                    context.showMessage("Insira seu email");
                   } else if (!password) {
-                    //Toast.show('Insira sua senha');
+                    context.showMessage("Insira sua senha");
                   } else {
-                    context.signIn(email, password);
+                    setLoading(true);
+                    await context.signIn(email, password);
+                    setLoading(false);
                   }
                 }}
               />

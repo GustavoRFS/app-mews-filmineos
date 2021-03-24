@@ -11,13 +11,12 @@ import {
 import RatingModal from "../components/RatingModal";
 import RatingStars from "../components/RatingStars";
 import AppDataContext from "../contexts/AppData";
-//import Toast from "react-native-smart-toast";
 import api from "../api/api";
 import LoadingModal from "../components/LoadingModal";
 import toLocaleString from "../utils/toLocaleString";
 
 export default ({ route, navigation }) => {
-  const { refreshData, userData } = useContext(AppDataContext);
+  const { refreshData, userData, showMessage } = useContext(AppDataContext);
   const [modalIsVisible, setModalVisibility] = useState(false);
   const [imageHeight, setImageHeight] = useState(
     (Dimensions.get("window").width * 9) / 16
@@ -176,14 +175,14 @@ export default ({ route, navigation }) => {
                     setLoadingState(true);
                     await refreshData();
                     setLoadingState(false);
-                    //Toast.show("Filme adicionado!");
+                    showMessage("Filme adicionado!");
                     navigation.pop();
                   })
                   .catch((err) => {
                     if (err.response.data) {
-                      //Toast.show(err.response.data.error);
+                      showMessage(err.response.data.error);
                     } else {
-                      //Toast.show("Grrr algo deu errado :c");
+                      showMessage("Grrr algo deu errado :c");
                     }
                     setButtonState(true);
                     setLoadingState(false);

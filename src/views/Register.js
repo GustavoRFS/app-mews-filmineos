@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import {
   View,
   ScrollView,
@@ -10,7 +10,8 @@ import {
 import TextInput from "../components/TextInput";
 import Picker from "react-native-dropdown-picker";
 import api from "../api/api";
-//import Toast from "react-native-smart-toast";
+import AuthContext from "../contexts/Auth";
+import LoadingModal from "../components/LoadingModal";
 
 const styles = StyleSheet.create({
   image: {
@@ -31,10 +32,17 @@ const styles = StyleSheet.create({
 });
 
 export default (props) => {
-  var email, password, passwordConfirmation;
-  var name = null;
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirmation, setPassConfirm] = useState();
+  const [isLoading, setLoading] = useState(false);
+
+  const [name, setName] = useState(null);
+
+  const { showMessage } = useContext(AuthContext);
   return (
     <View style={{ flex: 1, backgroundColor: "#1e1e1e" }}>
+      <LoadingModal visible={isLoading} />
       <ScrollView
         contentContainerStyle={{
           flex: 1,
@@ -57,13 +65,13 @@ export default (props) => {
           <TextInput
             placeholder="Email"
             onChangeText={(text) => {
-              email = text;
+              setEmail(text);
             }}
           />
           <TextInput
             placeholder="Senha"
             onChangeText={(text) => {
-              password = text;
+              setPassword(text);
             }}
             secureTextEntry={true}
           />
@@ -71,7 +79,7 @@ export default (props) => {
             secureTextEntry={true}
             placeholder="Confirmação da Senha"
             onChangeText={(text) => {
-              passwordConfirmation = text;
+              setPassConfirm(text);
             }}
           />
           <View
@@ -94,7 +102,7 @@ export default (props) => {
               defaultValue={name}
               placeholder="Selecione"
               onChangeItem={(item) => {
-                name = item.value;
+                setName(item.value);
               }}
               items={[
                 { label: "a Bururu", value: "Bururu" },
@@ -108,29 +116,32 @@ export default (props) => {
               color="#bf2f2f"
               onPress={() => {
                 if (!name) {
-                  //Toast.show("Selecione quem é você");
+                  showMessage("Selecione quem é você");
                 } else if (!email || !email.trim()) {
-                  //Toast.show("Insira seu email");
+                  showMessage("Insira seu email");
                 } else if (!password) {
-                  //Toast.show("Insira sua senha");
+                  showMessage("Insira sua senha");
                 } else if (!passwordConfirmation) {
-                  //Toast.show("Confirme sua senha");
+                  showMessage("Confirme sua senha");
                 } else {
                   if (password === passwordConfirmation) {
+                    setLoading(true);
                     api
                       .post("/auth/register", { name, email, password })
                       .then(() => {
+                        setLoading(false);
                         props.navigation.pop();
                       })
                       .catch((err) => {
+                        setLoading(false);
                         if (err.response.data) {
-                          //Toast.show(err.response.data.error);
+                          showMessage(err.response.data.error);
                         } else {
-                          //Toast.show("Grrr algo deu errado ô :c");
+                          showMessage("Grrr algo deu errado ô :c");
                         }
                       });
                   } else {
-                    //Toast.show("As senhas não são identicas");
+                    showMessage("As senhas não são identicas");
                   }
                 }
               }}
