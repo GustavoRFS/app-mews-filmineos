@@ -18,6 +18,9 @@ export const AuthProvider = ({ children }) => {
   const [snackVisibility, setSnackVisibility] = useState(false);
 
   useEffect(() => {
+    //As the back-end is running at Heroku, the app send a get at the starting point
+    //to turn on the Heroku server
+    api.get("/");
     async function loadStorageData() {
       const storagedToken = await AsyncStorage.getItem("token");
 
@@ -27,7 +30,7 @@ export const AuthProvider = ({ children }) => {
       }
     }
     loadStorageData();
-  });
+  }, []);
 
   function showMessage(text) {
     setMessage(text);
