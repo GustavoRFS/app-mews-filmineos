@@ -1,4 +1,4 @@
-# mews-filmineos
+# app-mews-filmineos
 
 Aplicativo feito em React Native utilizando o Expo CLI.
 
