@@ -132,36 +132,12 @@ export default (props) => {
             </View>
           ) : null}
           <View style={styles.sections}>
-            <Text style={styles.subtitle}>Avaliação Média: </Text>
+            <Text style={styles.subtitle}>Avaliação: </Text>
             {movie.average_rating !== undefined ? (
               <RatingStars
                 width={14}
                 fullWidth={80}
                 ratingValue={movie.average_rating}
-              />
-            ) : (
-              <Text style={styles.normalText}>Ainda não avaliado</Text>
-            )}
-          </View>
-          <View style={styles.sections}>
-            <Text style={styles.subtitle}>Avaliação da Bururu: </Text>
-            {movie.bururu_rating !== undefined ? (
-              <RatingStars
-                width={14}
-                fullWidth={80}
-                ratingValue={movie.bururu_rating}
-              />
-            ) : (
-              <Text style={styles.normalText}>Ainda não avaliado</Text>
-            )}
-          </View>
-          <View style={styles.sections}>
-            <Text style={styles.subtitle}>Avaliação do Gururu: </Text>
-            {movie.gururu_rating !== undefined ? (
-              <RatingStars
-                width={14}
-                fullWidth={80}
-                ratingValue={movie.gururu_rating}
               />
             ) : (
               <Text style={styles.normalText}>Ainda não avaliado</Text>

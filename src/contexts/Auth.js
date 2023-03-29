@@ -1,6 +1,4 @@
 import React, { createContext, useEffect, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import api from "../api/api";
 import { Snackbar } from "react-native-paper";
 
 const AuthContext = createContext({
@@ -17,47 +15,15 @@ export const AuthProvider = ({ children }) => {
   const [message, setMessage] = useState("");
   const [snackVisibility, setSnackVisibility] = useState(false);
 
-  useEffect(() => {
-    //As the back-end is running at Heroku, the app send a get at the starting point
-    //to turn on the Heroku server
-    api.get("/");
-    async function loadStorageData() {
-      const storagedToken = await AsyncStorage.getItem("token");
-
-      if (storagedToken) {
-        api.defaults.headers.Authorization = `Bearer ${storagedToken}`;
-        setSignedState(true);
-      }
-    }
-    loadStorageData();
-  }, []);
-
   function showMessage(text) {
     setMessage(text);
     setSnackVisibility(true);
   }
 
   function signIn(email, password) {
-    return api
-      .post("/auth/login", { email, password })
-      .then(async (response) => {
-        api.defaults.headers.Authorization = `Bearer ${response.data.token}`;
-
-        AsyncStorage.setItem("token", response.data.token).then(() => {
-          setSignedState(true);
-        });
-      })
-      .catch((err) => {
-        if (err.response.data) {
-          showMessage(err.response.data.error);
-        } else {
-          showMessage("Grrr algo deu errado ô :c");
-        }
-      });
+    setSignedState(true);
   }
   async function signOut() {
-    await AsyncStorage.clear();
-    api.defaults.headers.Authorization = undefined;
     setSignedState(false);
   }
 

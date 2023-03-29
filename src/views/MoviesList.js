@@ -4,9 +4,7 @@ import AppDataContext from "../contexts/AppData";
 import MoviesCarousel from "../components/MoviesCarousel";
 
 export default (props) => {
-  const { top10, bururuTop10, gururuTop10, notRated } = useContext(
-    AppDataContext
-  );
+  const { top10, notRated } = useContext(AppDataContext);
   return (
     <View style={{ flex: 1, backgroundColor: "#1e1e1e" }}>
       <ScrollView
@@ -22,18 +20,7 @@ export default (props) => {
           type="average"
           movieList={top10}
         ></MoviesCarousel>
-        <MoviesCarousel
-          navigation={props.navigation}
-          title="Top 10 da Bururu"
-          type="bururu"
-          movieList={bururuTop10}
-        ></MoviesCarousel>
-        <MoviesCarousel
-          navigation={props.navigation}
-          title="Top 10 do Gururu"
-          type="gururu"
-          movieList={gururuTop10}
-        ></MoviesCarousel>
+
         <MoviesCarousel
           navigation={props.navigation}
           title="Não avaliados por você"

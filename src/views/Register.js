@@ -1,15 +1,6 @@
 import React, { useContext, useState } from "react";
-import {
-  View,
-  ScrollView,
-  StyleSheet,
-  Image,
-  Text,
-  Button,
-} from "react-native";
+import { View, ScrollView, StyleSheet, Image, Button } from "react-native";
 import TextInput from "../components/TextInput";
-import Picker from "react-native-dropdown-picker";
-import api from "../api/api";
 import AuthContext from "../contexts/Auth";
 import LoadingModal from "../components/LoadingModal";
 
@@ -82,34 +73,7 @@ export default (props) => {
               setPassConfirm(text);
             }}
           />
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Text style={styles.whoYouAre}>Você é </Text>
-            <Picker
-              containerStyle={{
-                width: 130,
-                height: 30,
-              }}
-              arrowColor="#fafafa"
-              dropDownStyle={{ backgroundColor: "#2f2f2f" }}
-              labelStyle={{ color: "#fafafa" }}
-              style={{ backgroundColor: "#1e1e1e" }}
-              defaultValue={name}
-              placeholder="Selecione"
-              onChangeItem={(item) => {
-                setName(item.value);
-              }}
-              items={[
-                { label: "a Bururu", value: "Bururu" },
-                { label: "o Gururu", value: "Gururu" },
-              ]}
-            />
-          </View>
+
           <View style={{ width: 120, alignSelf: "center", zIndex: -1 }}>
             <Button
               title="Cadastrar"
@@ -125,21 +89,6 @@ export default (props) => {
                   showMessage("Confirme sua senha");
                 } else {
                   if (password === passwordConfirmation) {
-                    setLoading(true);
-                    api
-                      .post("/auth/register", { name, email, password })
-                      .then(() => {
-                        setLoading(false);
-                        props.navigation.pop();
-                      })
-                      .catch((err) => {
-                        setLoading(false);
-                        if (err.response.data) {
-                          showMessage(err.response.data.error);
-                        } else {
-                          showMessage("Grrr algo deu errado ô :c");
-                        }
-                      });
                   } else {
                     showMessage("As senhas não são identicas");
                   }

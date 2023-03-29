@@ -11,12 +11,11 @@ import {
 import RatingModal from "../components/RatingModal";
 import RatingStars from "../components/RatingStars";
 import AppDataContext from "../contexts/AppData";
-import api from "../api/api";
 import LoadingModal from "../components/LoadingModal";
 import toLocaleString from "../utils/toLocaleString";
 
 export default ({ route, navigation }) => {
-  const { refreshData, userData, showMessage } = useContext(AppDataContext);
+  const { showMessage, setMovies } = useContext(AppDataContext);
   const [modalIsVisible, setModalVisibility] = useState(false);
   const [imageHeight, setImageHeight] = useState(
     (Dimensions.get("window").width * 9) / 16
@@ -24,11 +23,14 @@ export default ({ route, navigation }) => {
   const [buttonEnabled, setButtonState] = useState(true);
   const [isLoading, setLoadingState] = useState(false);
 
+  const movie = route.params.movie;
+
+  const [averageRating, setAverageRating] = useState(movie.average_rating);
+
   Dimensions.addEventListener("change", () => {
     setImageHeight((Dimensions.get("window").width * 9) / 16);
   });
 
-  const movie = route.params.movie;
   const isAddingMovie = !!route.params.isAddingMovie;
 
   const styles = StyleSheet.create({
@@ -117,40 +119,12 @@ export default ({ route, navigation }) => {
         {!isAddingMovie ? (
           <View style={{ marginTop: 10 }}>
             <View style={styles.ratingTexts}>
-              <Text style={styles.subtitles}>Avaliação média: </Text>
-              {movie.average_rating ? (
+              <Text style={styles.subtitles}>Avaliação: </Text>
+              {averageRating ? (
                 <RatingStars
                   width={18}
                   fullWidth={100}
-                  ratingValue={movie.average_rating}
-                />
-              ) : (
-                <Text style={{ marginTop: 2, ...styles.normalText }}>
-                  Ainda não avaliado
-                </Text>
-              )}
-            </View>
-            <View style={styles.ratingTexts}>
-              <Text style={styles.subtitles}>Avaliação da Bururu: </Text>
-              {movie.bururu_rating ? (
-                <RatingStars
-                  width={18}
-                  fullWidth={100}
-                  ratingValue={movie.bururu_rating}
-                />
-              ) : (
-                <Text style={{ marginTop: 2, ...styles.normalText }}>
-                  Ainda não avaliado
-                </Text>
-              )}
-            </View>
-            <View style={styles.ratingTexts}>
-              <Text style={styles.subtitles}>Avaliação do Gururu: </Text>
-              {movie.gururu_rating ? (
-                <RatingStars
-                  width={18}
-                  fullWidth={100}
-                  ratingValue={movie.gururu_rating}
+                  ratingValue={averageRating}
                 />
               ) : (
                 <Text style={{ marginTop: 2, ...styles.normalText }}>
@@ -168,25 +142,10 @@ export default ({ route, navigation }) => {
             title={isAddingMovie ? "Adicionar" : "Avaliar"}
             onPress={() => {
               if (isAddingMovie) {
-                setButtonState(false);
-                api
-                  .post("/movies", movie)
-                  .then(async () => {
-                    setLoadingState(true);
-                    await refreshData();
-                    setLoadingState(false);
-                    showMessage("Filme adicionado!");
-                    navigation.pop();
-                  })
-                  .catch((err) => {
-                    if (err.response.data) {
-                      showMessage(err.response.data.error);
-                    } else {
-                      showMessage("Grrr algo deu errado :c");
-                    }
-                    setButtonState(true);
-                    setLoadingState(false);
-                  });
+                setMovies((movies) => [...movies, movie]);
+
+                showMessage("Filme adicionado!");
+                navigation.pop();
               } else {
                 setModalVisibility(true);
               }
@@ -196,15 +155,11 @@ export default ({ route, navigation }) => {
       </View>
       {!isAddingMovie ? (
         <RatingModal
-          initialValue={
-            userData.name === "Bururu"
-              ? movie.bururu_rating || 0
-              : movie.gururu_rating || 0
-          }
+          initialValue={movie.average_rating}
           visible={modalIsVisible}
-          onRequestClose={() => {
+          onRequestClose={(newValue) => {
             setModalVisibility(false);
-            navigation.pop();
+            setAverageRating(newValue);
           }}
           movie={movie}
         />

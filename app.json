@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Mews Filmineos",
-    "slug": "mews-filmineos",
+    "name": "Meus Filmes",
+    "slug": "meus-filmes",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./src/assets/ios_icon.png",
@@ -15,7 +15,7 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "bundleIdentifier": "com.charlintravazap.mews-filmineos",
+      "bundleIdentifier": "com.charlintravazap.meus-filmes",
       "buildNumber": "1.0.0",
       "supportsTablet": true
     },
@@ -24,7 +24,7 @@
         "foregroundImage": "./src/assets/adaptive-icon.png",
         "backgroundColor": "#0b0b0b"
       },
-      "package": "com.charlintravazap.mews_filmineos",
+      "package": "com.charlintravazap.meus_filmes",
       "versionCode": 1
     },
     "web": {

@@ -4,12 +4,11 @@ import { ScrollView } from "react-native-gesture-handler";
 import MovieSwippableItem from "../components/MovieSwippableItem";
 import AppDataContext from "../contexts/AppData";
 import LoadingModal from "../components/LoadingModal";
-import api from "../api/api";
 import TextInput from "../components/TextInput";
 
 export default () => {
   const [isLoading, setLoadingState] = useState(false);
-  const { allMovies, refreshData } = useContext(AppDataContext);
+  const { allMovies, refreshData, setMovies } = useContext(AppDataContext);
   const [search, setSearchText] = useState("");
 
   const submitSearch = (text) => {
@@ -42,13 +41,11 @@ export default () => {
           ) {
             return (
               <MovieSwippableItem
-                key={movie._id}
+                key={`${movie.id}`}
                 movie={movie}
                 onPress={() => {
-                  api.delete(`/movies?_id=${movie._id}`).then(async () => {
-                    setLoadingState(true);
-                    await refreshData();
-                    setLoadingState(false);
+                  setMovies((movies) => {
+                    return movies.filter((m) => m._id !== movie._id);
                   });
                 }}
               />

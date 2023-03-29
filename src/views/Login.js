@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
 
 export default (props) => {
   const context = useContext(AuthContext);
+
   const [isLoading, setLoading] = useState(false);
 
   const [email, setEmail] = useState("");
@@ -80,15 +81,15 @@ export default (props) => {
                 title="Entrar"
                 color="#bf2f2f"
                 onPress={async () => {
-                  if (!email || !email.trim()) {
-                    context.showMessage("Insira seu email");
-                  } else if (!password) {
-                    context.showMessage("Insira sua senha");
-                  } else {
-                    setLoading(true);
-                    await context.signIn(email, password);
-                    setLoading(false);
-                  }
+                  // if (!email || !email.trim()) {
+                  //   context.showMessage("Insira seu email");
+                  // } else if (!password) {
+                  //   context.showMessage("Insira sua senha");
+                  // } else {
+                  setLoading(true);
+                  await context.signIn(email, password);
+                  setLoading(false);
+                  // }
                 }}
               />
             </View>

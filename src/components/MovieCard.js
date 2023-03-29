@@ -107,16 +107,8 @@ export default (props) => {
 
   switch (props.type) {
     case "average":
-      text = "Avaliação Média: ";
+      text = "Avaliação: ";
       rating = props.movie.average_rating;
-      break;
-    case "gururu":
-      text = "Avaliação do Gururu: ";
-      rating = props.movie.gururu_rating;
-      break;
-    case "bururu":
-      text = "Avaliação da Bururu: ";
-      rating = props.movie.bururu_rating;
       break;
     default:
       text = "Ainda não avaliado";

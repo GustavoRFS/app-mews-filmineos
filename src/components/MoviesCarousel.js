@@ -74,7 +74,7 @@ export default (props) => {
           {renderCarousel(props.movieList)}
         </ScrollView>
       ) : (
-        <View style={{ marginVertical: 30 }}>
+        <View style={{ marginVertical: 100 }}>
           <Text style={styles.noMovie}>Nenhum filme</Text>
           <Text style={{ ...styles.noMovie, transform: [{ rotate: "90deg" }] }}>
             :c
