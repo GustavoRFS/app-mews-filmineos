@@ -44,9 +44,9 @@ export default () => {
                 key={`${movie.id}`}
                 movie={movie}
                 onPress={() => {
-                  setMovies((movies) => {
-                    return movies.filter((m) => m._id !== movie._id);
-                  });
+                  setMovies((movies) =>
+                    movies.filter((m) => m.id !== movie.id)
+                  );
                 }}
               />
             );

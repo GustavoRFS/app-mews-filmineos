@@ -61,7 +61,7 @@ export default (props) => {
             style={{
               width: 200,
               position: "absolute",
-              top: "48%",
+              top: 86,
             }}
           >
             <Slider

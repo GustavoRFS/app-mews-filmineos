@@ -7,6 +7,7 @@ import {
   View,
   Dimensions,
   Button,
+  Platform,
 } from "react-native";
 import RatingModal from "../components/RatingModal";
 import RatingStars from "../components/RatingStars";
@@ -52,8 +53,7 @@ export default ({ route, navigation }) => {
     },
     image: {
       width: "100%",
-      height: imageHeight,
-      resizeMode: "cover",
+      height: Platform.OS === "web" ? 400 : imageHeight,
     },
     noImage: {
       width: "100%",
@@ -78,6 +78,7 @@ export default ({ route, navigation }) => {
     <ScrollView style={{ flex: 1, backgroundColor: "#1a1a1a" }}>
       {movie.backdrop_path ? (
         <Image
+          resizeMode="contain"
           style={styles.image}
           source={{
             uri: `https://image.tmdb.org/t/p/w500${movie.backdrop_path}`,

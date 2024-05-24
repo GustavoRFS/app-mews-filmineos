@@ -7,6 +7,7 @@ import {
   Pressable,
   Animated,
   TouchableNativeFeedback,
+  Platform,
 } from "react-native";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -24,6 +25,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingLeft: 10,
     paddingVertical: 10,
+    flex: 1,
   },
   info: {
     display: "flex",
@@ -55,20 +57,25 @@ export default (props) => {
   const { movie } = props;
   const navigation = useNavigation();
 
-  const swipeableRight = (progress) => {
+  const isSwipeable = Platform.OS !== "web";
+
+  const Container = Platform.OS === "web" ? Pressable : TouchableNativeFeedback;
+
+  const SwipeableRight = (progress) => {
     return (
-      <TouchableNativeFeedback onPress={props.onPress}>
+      <Container onPress={props.onPress} style={{ height: "100%" }}>
         <Animated.View
           style={[
             {
               justifyContent: "center",
               width: 120,
+              height: "100%",
               backgroundColor: "#bf2f2f",
             },
             {
               transform: [
                 {
-                  translateX: progress.interpolate({
+                  translateX: progress?.interpolate?.({
                     inputRange: [0, 1],
                     outputRange: [120, 0],
                   }),
@@ -88,13 +95,21 @@ export default (props) => {
             <Icon color="#fff" name="trash" size={40} />
           </View>
         </Animated.View>
-      </TouchableNativeFeedback>
+      </Container>
     );
   };
 
   const releaseDate = toLocaleString(movie.release_date);
+
+  const ItemContainer = isSwipeable ? Swipeable : View;
+
   return (
-    <Swipeable renderRightActions={swipeableRight} friction={2.3}>
+    <ItemContainer
+      enabled={isSwipeable}
+      renderRightActions={SwipeableRight}
+      friction={2.3}
+      style={{ flexDirection: "row", justifyContent: "space-between" }}
+    >
       <Pressable
         onPress={() =>
           navigation.navigate("MovieInfo", { movie, isAddingMovie: false })
@@ -145,6 +160,7 @@ export default (props) => {
           </View>
         </View>
       </Pressable>
-    </Swipeable>
+      {!isSwipeable && <SwipeableRight />}
+    </ItemContainer>
   );
 };
